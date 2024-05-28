@@ -1,5 +1,11 @@
+import Header from "../Components/Header";
+
 const Home = () => {
-	return <div className="font-extrabold bg-slate-700">Home</div>;
+	return (
+		<section>
+			<Header />
+		</section>
+	);
 };
 
 export default Home;
