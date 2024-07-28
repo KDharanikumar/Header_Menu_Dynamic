@@ -1,16 +1,11 @@
 import { useState, useEffect } from "react";
 import { Bars3Icon } from "@heroicons/react/24/outline";
-
-const products = [
-	{ name: "Home", href: "#" },
-	{ name: "Pricing", href: "#" },
-	{ name: "Features", href: "#" },
-	{ name: "About Us", href: "#" },
-	{ name: "Services", href: "#" },
-];
+import { menus } from "./Menus";
+import { Link } from "react-router-dom";
 
 export default function Header() {
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+	const [click, setClick] = useState(false);
 
 	useEffect(() => {
 		const offcanvasElement = document.getElementById("offcanvasNavbar");
@@ -45,13 +40,33 @@ export default function Header() {
 					</button>
 				</div>
 				<div className="hidden lg:flex lg:gap-x-12">
-					{products.map((product) => (
-						<div key={product.name}>
-							<a href={product.href} className="text-sm font-semibold leading-6 text-gray-900">
-								{product.name}
-							</a>
-						</div>
-					))}
+					<ul className="flex space-x-20 mb-0">
+						{menus.map((menu, index) => (
+							<li key={index} className="relative group" onClick={() => setClick(!click)}>
+								<Link to={menu.link} className="no-underline hover:underline text-sm font-semibold leading-6 text-gray-900" key={index}>
+									{menu.name}
+								</Link>
+								{menu.subMenu && (
+									<div className="group">
+										{/* <div className="flex items-center cursor-pointer"> */}
+										<Link className="text-decoration-none text-sm font-semibold leading-6 text-gray-900" key={index}>
+											{menu.head}
+										</Link>
+										{/* </div> */}
+										<ul className="px-4 shadow-lg bg-clip-border rounded-xl absolute z-10 p-0 bg-white text-black space-y-1 hidden group-hover:block hover:block">
+											{menu.subLinks.map((slink, subIndex) => (
+												<li key={subIndex} className="w-max">
+													<Link to={slink.link} key={subIndex} className="text-decoration-none text-sm font-semibold leading-6 text-gray-900">
+														{slink.name}
+													</Link>
+												</li>
+											))}
+										</ul>
+									</div>
+								)}
+							</li>
+						))}
+					</ul>
 				</div>
 				<div className="hidden lg:flex lg:flex-1 lg:justify-end">
 					<a href="#" className="text-sm font-semibold leading-6 text-gray-900">
@@ -69,11 +84,20 @@ export default function Header() {
 					<button type="button" className="btn-close" onClick={() => setMobileMenuOpen(false)} aria-label="Close"></button>
 				</div>
 				<div className="offcanvas-body">
-					{products.map((product) => (
-						<div key={product.name} className="py-2">
-							<a href={product.href} className="d-block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
-								{product.name}
+					{menus.map((menu, index) => (
+						<div key={index} className="py-2">
+							<a href={menu.link} className="d-block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+								{menu.name}
 							</a>
+							{menu.subMenu && (
+								<div className="py-2 pl-4">
+									{menu.subLinks.map((slink, subIndex) => (
+										<a key={subIndex} href={slink.link} className="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100">
+											{slink.name}
+										</a>
+									))}
+								</div>
+							)}
 						</div>
 					))}
 					<div className="py-6">
