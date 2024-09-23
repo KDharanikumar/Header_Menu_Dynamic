@@ -2,7 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-
+:root{
+	--primary: #00D563
+}
 
 * {
   font-family: "Poppins", sans-serif;

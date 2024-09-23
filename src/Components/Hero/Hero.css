@@ -1,0 +1,69 @@
+#hero {
+    width: 100%;
+    height: 100vh; /* Full height for the hero section */
+    overflow: hidden; /* Hide overflow */
+    position: relative; /* Positioning context for absolute children */
+    display: flex; /* Use flexbox for centering */
+    align-items: center; /* Center items vertically */
+}
+
+.videoTag {
+    position: absolute; /* Video fills the section */
+    top: 50%;
+    left: 50%;
+    min-width: 100%; /* Ensure it covers full width */
+    min-height: 100%; /* Ensure it covers full height */
+    width: auto; /* Maintain aspect ratio */
+    height: auto; /* Maintain aspect ratio */
+    z-index: -1; /* Behind other content */
+    transform: translate(-50%, -50%); /* Center video */
+}
+
+#hero:before {
+    content: "";
+    background: rgba(0, 0, 0, 0.6); /* Overlay for better text visibility */
+    position: absolute;
+    bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+#hero .container {
+    position: relative;
+    text-align: center;
+    z-index: 1; /* Ensure the content is above the overlay */
+    padding: 20px; /* Add some padding for aesthetics */
+}
+
+#hero h1 {
+    margin: 0;
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 64px;
+    color: #fff;
+    font-family: "Poppins", sans-serif;
+}
+
+#hero h1 span {
+    color: #ff4a17;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    #hero {
+        height: 100vh; /* Maintain full height on mobile */
+    }
+
+    .videoTag {
+        min-width: 100%;
+        min-height: 100%;
+        height: 100%; /* Ensure it fills the viewport height */
+        width: auto; /* Maintain aspect ratio */
+    }
+
+    #hero h1 {
+        font-size: 28px;
+        line-height: 36px;
+    }
+}
