@@ -1,6 +1,7 @@
 import { Bars3Icon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+
 import "./Header.css";
 import { menus } from "./Menus";
 
@@ -25,14 +26,22 @@ export default function Header() {
 		setOpenSubmenuIndex(openSubmenuIndex === index ? null : index);
 	};
 
+	const handleSubmenuClick = (subLink) => {
+		if (subLink) {
+			// Optionally, you could navigate to the link if it's a valid link
+		}
+		setOpenSubmenuIndex(null);
+	};
+
 	return (
-		<header className="text-white">
-			<nav className="mx-auto flex max-w-7xl items-center justify-between lg:py-6 lg:px-8" aria-label="Global">
+		<header className="absolute w-full top-0 left-0 z-10 text-white hover:bg-white">
+			<nav className="hover:text-black mx-auto flex max-w-8xl items-center justify-between lg:px-8" aria-label="Global">
 				<div className="flex lg:flex-1">
-					<a href="#" className="-m-1.5 p-1.5">
-						<h1 className="h-8 w-auto text-3xl">Starflit</h1>
-					</a>
+					<Link to="#" className="-m-1.5 p-1.5">
+						<h1 className="w-auto text-3xl">Starflit</h1>
+					</Link>
 				</div>
+
 				<div className="flex lg:hidden">
 					<button
 						type="button"
@@ -46,35 +55,54 @@ export default function Header() {
 				<div className="hidden lg:flex lg:gap-x-12">
 					<ul className="navbar flex space-x-20 mb-0">
 						{menus.map((menu, index) => (
-							<li key={index} className="nav-item">
+							<li key={index} className="nav-item relative inline-block py-2 mx-5">
 								{/* Main menu link */}
 								{menu.subMenu ? (
-									<div className="nav-items dropdown"
+									<div
 										onMouseEnter={() => toggleSubmenu(index)}
 										onMouseLeave={() => toggleSubmenu(null)}
 									>
-										<button className="nav-link dropdown-toggle text-decoration-none text-sm font-semibold leading-6">
+										<button className="nav-link relative block tracking-wide py-2 text-base no-underline font-medium">
 											{menu.head}
 											<ChevronDownIcon
-												className={`h-4 w-4 inline ml-1 transition-transform ${openSubmenuIndex === index ? "rotate-180" : ""}`}
+												className={`h-4 w-4 inline ml-1 ${openSubmenuIndex === index ? "rotate-180" : ""}`}
 												aria-hidden="true"
 											/>
+											{/* Dropdown for subMenu */}
+											{openSubmenuIndex === index && (
+												<ul className="dropdown-menu d-flex justify-around w-full block fixed py-9 mt-4 left-0 shadow-lg bg-white text-black rounded-none z-10">
+													{menu.subLinks.map((slink, subIndex) => (
+														<li key={subIndex}>
+															<Link
+																to={slink.link}
+																className="dropdown-item cursor-default bg-white mb-3 p-2 text-sm hover:bg-gray-100"
+																onClick={() => handleSubmenuClick(slink.link)}
+															>
+																{/* Render image and name */}
+																{slink.img && <img src={slink.img} alt={slink.name} className="inline-block mr-2 h-4 w-4" />}
+																{slink.name}
+															</Link>
+															{/* Check for subLinks within subLinks */}
+															{slink.subLinks && (
+																<ul className="pl-6">
+																	{slink.subLinks.map((subSlink, subSubIndex) => (
+																		<li key={subSubIndex}>
+																			<Link to={subSlink.link} className="dropdown-item mb-2 p-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => handleSubmenuClick(subSlink.link)}>
+																				{subSlink.img && <img src={subSlink.img} alt={subSlink.name} className="inline-block mr-2 h-4 w-4" />}
+																				{subSlink.name}
+																			</Link>
+																		</li>
+																	))}
+																</ul>
+															)}
+														</li>
+													))}
+												</ul>
+											)}
 										</button>
-										{/* Dropdown for subMenu */}
-										{openSubmenuIndex === index && (
-											<ul className="dropdown-menu absolute left-0 mt-2 w-full p-2 shadow-lg bg-white text-black rounded-md z-10">
-												{menu.subLinks.map((slink, subIndex) => (
-													<li key={subIndex} >
-														<Link to={slink.link} className="dropdown-item block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100">
-															{slink.name}
-														</Link>
-													</li>
-												))}
-											</ul>
-										)}
 									</div>
 								) : (
-									<Link to={menu.link} className="nav-link no-underline hover:underline text-sm font-semibold leading-6">
+									<Link to={menu.link} className="nav-link relative block tracking-wide py-2 text-base no-underline font-medium">
 										{menu.name}
 									</Link>
 								)}
@@ -82,11 +110,12 @@ export default function Header() {
 						))}
 					</ul>
 				</div>
-				<div className="hidden lg:flex lg:flex-1 lg:justify-end">
-					<a href="#" className="text-sm font-semibold leading-6">
+
+				<button className="hidden lg:flex lg:flex-1 lg:justify-end">
+					<a href="#" className="text-sm font-semibold">
 						Call Now
 					</a>
-				</div>
+				</button>
 			</nav>
 
 			{/* Bootstrap Offcanvas Menu */}
@@ -120,9 +149,24 @@ export default function Header() {
 									{openSubmenuIndex === index && (
 										<div className="pl-4">
 											{menu.subLinks.map((slink, subIndex) => (
-												<a key={subIndex} href={slink.link} className="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100">
-													{slink.name}
-												</a>
+												<div key={subIndex}>
+													<a href={slink.link} className="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => handleSubmenuClick(slink.link)}>
+														{/* Render image and name for Offcanvas */}
+														{slink.img && <img src={slink.img} alt={slink.name} className="inline-block mr-2 h-4 w-4" />}
+														{slink.name}
+													</a>
+													{/* Check for subLinks within subLinks */}
+													{slink.subLinks && (
+														<div className="pl-4">
+															{slink.subLinks.map((subSlink, subSubIndex) => (
+																<a key={subSubIndex} href={subSlink.link} className="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => handleSubmenuClick(subSlink.link)}>
+																	{subSlink.img && <img src={subSlink.img} alt={subSlink.name} className="inline-block mr-2 h-4 w-4" />}
+																	{subSlink.name}
+																</a>
+															))}
+														</div>
+													)}
+												</div>
 											))}
 										</div>
 									)}

@@ -9,10 +9,11 @@ import Services from "../../Pages/Services/Services";
 
 // Create a map of path to component for easy lookup
 const componentMap = {
-	"/home": Home,
+	"/": Home,
 	"/aboutus": AboutUs,
-	"/contact": Contact,
 	"/services": Services,
+	"/contact": Contact,
+
 };
 
 const Navigation = () => {
